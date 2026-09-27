@@ -1,0 +1,308 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* deep dark blue-purple */
+    --background: 260 87% 3%;
+    /* off-white */
+    --foreground: 40 6% 95%;
+    /* hero sub text */
+    --hero-sub: 40 6% 82%;
+
+    --card: 260 87% 5%;
+    --card-foreground: 40 6% 95%;
+    --popover: 260 87% 4%;
+    --popover-foreground: 40 6% 95%;
+    --primary: 40 6% 95%;
+    --primary-foreground: 260 87% 3%;
+    --secondary: 260 40% 12%;
+    --secondary-foreground: 40 6% 95%;
+    --muted: 260 40% 12%;
+    --muted-foreground: 40 6% 65%;
+    --accent: 260 40% 14%;
+    --accent-foreground: 40 6% 95%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 6% 95%;
+    --border: 260 30% 18%;
+    --input: 260 30% 18%;
+    --ring: 260 60% 55%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Geist Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(168, 85, 247, 0.35);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(260 87% 4%);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(260 30% 20%);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(260 30% 28%);
+  }
+}
+
+/* ── liquid glass ────────────────────────────────────────────────
+   Used by the marquee chips, the secondary buttons and the modal.
+   The ::before layer paints a 1.4px gradient ring that is brightest
+   at the top and bottom edges and vanishes through the middle, which
+   is what reads as a glass edge rather than a plain border.        */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── marquee ─────────────────────────────────────────────────────
+   The track holds the logo list twice, so translating it by exactly
+   -50% lands on a pixel-identical frame and the loop is seamless.   */
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* the background video is driven by requestAnimationFrame, so the
+   fade is set inline; this only stops the compositor fighting it */
+.hero-video {
+  will-change: opacity;
+  opacity: 0;
+}
+
+/* ── the download button ──────────────────────────────────────── */
+
+/* slow breathing glow so the button is never fully at rest */
+@keyframes cta-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.cta-breathe {
+  animation: cta-breathe 3.2s ease-in-out infinite;
+}
+
+/* a band of light that sweeps across the button on a loop */
+@keyframes cta-sheen {
+  0% {
+    transform: translateX(-140%) skewX(-18deg);
+  }
+  55%,
+  100% {
+    transform: translateX(240%) skewX(-18deg);
+  }
+}
+
+.cta-sheen {
+  animation: cta-sheen 4.4s ease-in-out infinite;
+}
+
+/* expanding ring fired from the click point */
+@keyframes cta-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.cta-ring {
+  animation: cta-ring 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* particle burst */
+@keyframes cta-particle {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0);
+    opacity: 0;
+  }
+}
+
+.cta-particle {
+  animation: cta-particle var(--dur, 900ms) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── scroll reveal ──────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── misc ───────────────────────────────────────────────────────── */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2.4s linear infinite;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 240ms ease-out forwards;
+}
+
+@keyframes progress-stripe {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 28px 0;
+  }
+}
+
+.progress-stripe {
+  background-image: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.28) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.28) 75%,
+    transparent 75%
+  );
+  background-size: 28px 28px;
+  animation: progress-stripe 620ms linear infinite;
+}
+
+/* respect users who have asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  .cta-breathe,
+  .cta-sheen,
+  .animate-marquee,
+  .animate-float-slow,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
