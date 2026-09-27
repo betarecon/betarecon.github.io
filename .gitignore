@@ -23,3 +23,7 @@ pnpm-debug.log*
 
 # local screenshots taken during development
 preview*.png
+
+# typescript incremental build cache
+*.tsbuildinfo
+

@@ -32,9 +32,25 @@ jobs:
         run: npm ci
 
       - name: Build
-        # Pages serves from /<repo>/, so the build must be told the subpath.
-        # Without this every asset 404s and the site renders blank.
-        run: BASE_PATH="/${GITHUB_REPOSITORY#*/}/" npm run build
+        # A user site (repo named <user>.github.io) is served from the DOMAIN
+        # ROOT, so base must be "/" — not "/<repo>/".
+        #
+        # This resolves itself either way: the repo name IS "<user>.github.io",
+        # so the default branch of the expression below yields "/" for a user
+        # site and "/<repo>/" for a project site. Deriving it rather than
+        # hardcoding it means the same workflow works in both places.
+        #
+        # Guard the empty case explicitly: if someone later renames the repo,
+        # GITHUB_REPOSITORY is still set, so this cannot silently become "//".
+        run: |
+          REPO="${GITHUB_REPOSITORY#*/}"
+          if [ "$REPO" = "${GITHUB_REPOSITORY%%/*}.github.io" ]; then
+            export BASE_PATH="/"
+          else
+            export BASE_PATH="/${REPO}/"
+          fi
+          echo "Deploying with BASE_PATH=${BASE_PATH} (repo: ${REPO})"
+          npm run build
 
       - uses: actions/configure-pages@v4
 
