@@ -18,7 +18,7 @@ import { Features, Clips, Pricing, Faq, FinalCta, Footer } from "@/components/Se
  * the project needs to change.
  */
 const DOWNLOAD_URL =
-  "https://github.com/gigigaguigagajog-blip/bug-free-rust/releases/download/stable/ReconStudio.exe";
+  "https://github.com/betarecon/redesigned-spoon/releases/download/stable/ReconStudio.exe";
 const FILE_NAME = "ReconStudio.exe";
 
 export default function Index() {
