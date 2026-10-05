@@ -118,7 +118,7 @@ export default function Hero({ onDownload }: { onDownload: (o: { x: number; y: n
           <p className="mt-[9px] max-w-md text-lg leading-8 text-hero-sub opacity-80">
             The fastest way to capture and share
             <br />
-            your best Fortnite moments
+            your best moments in almost any game
           </p>
 
           <div className="mt-[25px]">

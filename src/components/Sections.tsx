@@ -366,7 +366,7 @@ const FAQS = [
   },
   {
     q: "Which games does it work with?",
-    a: "Anything that renders to a window, not just Fortnite. Auto-capture is tuned for Fortnite first because that is what most people use it for, but recording, replay and the library work everywhere.",
+    a: "Almost any game that renders to a window — shooters, battle royales, MOBAs, racing, MMOs, emulators and browser games included. Recording, instant replay and the library work everywhere. Auto-capture watches the screen for highlight moments rather than hooking a specific title, so it works across games without per-game setup.",
   },
   {
     q: "Where do my clips go?",
